@@ -1,0 +1,62 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>Result Analysis</title>  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+        <link rel='icon' href='https://www.logopik.com/wp-content/uploads/edd/2018/10/Letter-T-Logo-Vector.png'>
+        <meta name="description" content="Result Page">
+    </head>     
+    <body>
+        <h3>Result<div id='img' ></div></h3>
+        <p id='tweet'>Tweet : ----</p>
+        <p id='status'>Score: ----</p>
+        <p id='score'>Status: ----</p>
+        <div id="piechart_3d" style="width: 500px; height: 300px;"></div>
+        <script type="text/javascript">
+	       var user = JSON.parse(%%data | tojson | safe%%);
+    //console.log(user);
+    document.getElementById('tweet').innerHTML= 'Tweet : '+user['tweet'];
+    document.getElementById('status').innerHTML='Score : '+(user['score']*100).toFixed(2)+'%';
+    document.getElementById('score').innerHTML= 'Status : '+user['label'];
+    var positive,negative;
+    if(user['label']=='Positive')
+    {
+        document.getElementById('img').innerHTML="<img src='https://www.lupusuk.org.uk/wp-content/uploads/2018/03/Green-Tick-PNG-Picture.png' height='40px' width='40px'>";
+        document.title='Result Positive';
+        positive=parseFloat((user['score']*100).toFixed(2));
+        negative=parseFloat((100-positive).toFixed(2));
+    }
+    else
+    {
+        document.getElementById('img').innerHTML="<img src='https://1001freedownloads.s3.amazonaws.com/vector/thumb/64210/X-marks-the-spot.png' height='40px' width='40px'>";
+        document.title='Result Negative';
+        positive=parseFloat((user['score']*100).toFixed(2));
+        negative=parseFloat((100-positive).toFixed(2));
+    }
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      console.log(positive);
+      console.log(negative);
+      function drawChart() {
+      console.log(typeof positive);
+      console.log(typeof negative);
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Positive',     positive],
+          ['Negative',      negative]
+        ]);
+
+        var options = {
+          title: 'Tweet Result',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+      </script>     
+      
+    </body>     
+</html>
